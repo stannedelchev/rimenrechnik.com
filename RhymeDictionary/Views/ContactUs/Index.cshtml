@@ -1,0 +1,40 @@
+﻿@model RhymeDictionary.Controllers.CommentViewModel
+<div class="page-header">
+    <h1>Контакти</h1>
+</div>
+
+<h2>Фейсбук страница</h2>
+<div id="fb-root"></div>
+<script>
+    (function (d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s); js.id = id;
+        js.src = 'https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.11';
+        fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));</script>
+<div class="fb-page" data-href="https://www.facebook.com/rimenrechnik/" data-small-header="false" data-adapt-container-width="true" data-hide-cover="false" data-show-facepile="true"><blockquote cite="https://www.facebook.com/rimenrechnik/" class="fb-xfbml-parse-ignore"><a href="https://www.facebook.com/rimenrechnik/">Римен Речник</a></blockquote></div>
+
+<h2>Контактна форма</h2>
+<form class="form-horizontal" method="post">
+    @if (Convert.ToBoolean(ViewData["CommentSuccess"]) == true)
+    {
+        <p class="bg-success">Благодарим за коментара!</p>
+    }
+
+    @Html.AntiForgeryToken()
+
+    <label asp-for="Email" class="control-label">Имейл за обратна връзка</label>
+    <input asp-for="Email" type="text" name="Email" class="form-control" placeholder="example@test.com" />
+    <span asp-validation-for="Email" class="text-danger"></span>
+
+    <br />
+
+    <label asp-for="Text" class="control-label">Вашият коментар</label>
+    <textarea asp-for="Text" name="Text" class="form-control" rows="10" placeholder="Вашият коментар"></textarea>
+    <span asp-validation-for="Text" class="text-danger"></span>
+
+    <br />
+
+    <button type="submit" value="Изпрати коментар" class="form-control btn btn-success">Изпрати коментар</button>
+</form>

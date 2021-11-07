@@ -1,0 +1,26 @@
+﻿@using RhymeDictionary.Helpers;
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <a href="/" class="navbar-left">
+            <img src="~/images/logo.png" alt="Римен речник лого" />
+        </a>
+
+        <ul class="nav navbar-nav">
+            <li class="@(ViewData[Constants.ActivePageViewDataId] as string == Constants.RhymeDictionaryNavbarId ? " active" : "" )">
+                @Html.ActionLink("Римен речник", "", "/")
+            </li>
+
+            <li class="@(ViewData[Constants.ActivePageViewDataId] as string == Constants.AddWordNavbarId ? "active" : "")">
+                @Html.ActionLink("Добави рими", "", "добави-рими")
+            </li>
+
+            <li class="@(ViewData[Constants.ActivePageViewDataId] as string == Constants.AboutNavbarId ? "active" : "")">
+                @Html.ActionLink("За нас", "", "за-нас")
+            </li>
+
+            <li class="@(ViewData[Constants.ActivePageViewDataId] as string == Constants.ContactUsNavbarId ? "active" : "")">
+                @Html.ActionLink("Контакти", "", "контакти")
+            </li>
+        </ul>
+    </div>
+</nav>

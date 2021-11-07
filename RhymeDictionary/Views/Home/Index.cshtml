@@ -1,0 +1,103 @@
+﻿@model RhymeDictionary.ViewModels.RhymesViewModel
+@inject Microsoft.AspNetCore.Hosting.IHostingEnvironment hostingEnv
+<div class="page-header">
+    <h1>
+        Римен речник
+    </h1>
+</div>
+
+<div id="news-banner" class="alert alert-info">
+    Приятели, създадохме <a href="https://www.facebook.com/rimenrechnik/">официална Фейсбук страница</a>! В нея ще публикуваме новини за сайта, ще четем вашата критика, както и ще дискутираме интересни неща, свързани с мерената реч! <a href="https://www.facebook.com/rimenrechnik/">Натиснете тук за да я посетите.</a>
+</div>
+
+<form class="form-horizontal" action="/" id="word-form">
+    <label for="word-input">Въведете дума за римуване. Често се търсят <a href="/рими/любов">любов</a>, <a href="/рими/спомен">спомен</a> и <a href="/рими/живот">живот</a>:</label>
+    <input id="word-input" type="text" name="word" class="form-control" value="@Model?.Word" />
+    <span id="word-validation-message" class="text-danger"></span>
+    <br />
+
+    <button type="submit" value="Намери рими" class="form-control btn btn-success" id="submit-button">Римувай</button>
+</form>
+
+@if (Model != null && Model.Count > 0)
+{
+    <h2>Рими на думата @Model.Word</h2>
+    <div class="col-md-2">
+        <h3>Едносрични</h3>
+        @if (Model.Monosyllabic.Any())
+        {
+            <ul class="list-group">
+                @foreach (var word in Model.Monosyllabic)
+                {
+                    <li class="list-group-item">
+                        <span>@word.Normal</span>
+                    </li>
+                }
+            </ul>
+        }
+    </div>
+    <div class="col-md-3">
+        <h3>Двусрични</h3>
+        @if (Model.Dissyllabic.Any())
+        {
+            <ul class="list-group">
+                @foreach (var word in Model.Dissyllabic)
+                {
+                    <li class="list-group-item">
+                        <span>@word.Normal</span>
+                    </li>
+                }
+            </ul>
+        }
+    </div>
+    <div class="col-md-3">
+        <h3>Трисрични</h3>
+        @if (Model.Trisyllabic.Any())
+        {
+            <ul class="list-group">
+                @foreach (var word in Model.Trisyllabic)
+                {
+                    <li class="list-group-item">
+                        <span>@word.Normal</span>
+                    </li>
+                }
+            </ul>
+        }
+    </div>
+    <div class="col-md-3">
+        <h3>Многосрични</h3>
+        @if (Model.Polysyllabic.Any())
+        {
+            <ul class="list-group">
+                @foreach (var word in Model.Polysyllabic)
+                {
+                    <li class="list-group-item">
+                        <span>@word.Normal</span>
+                    </li>
+                }
+            </ul>
+        }
+    </div>
+}
+else if (Model != null)
+{
+    <h3>Не намерихме рими на думата @Model.Word.</h3>
+}
+
+@section Scripts
+    {
+    <script>
+        var $input = $('#word-input');
+        var $validationText = $('#word-validation-message');
+        $('#word-form').submit(function (ev) {
+            if ($input.val().trim() === '') {
+
+                $validationText.html('Моля въведете дума за римуване');
+                ev.preventDefault();
+                return false;
+            }
+
+            return true;
+        });
+    </script>
+}

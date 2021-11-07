@@ -1,0 +1,95 @@
+﻿<Window x:Class="RhymeDictionary.Wpf.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:RhymeDictionary.Wpf"
+        xmlns:converters="clr-namespace:RhymeDictionary.Wpf.Converters"
+        xmlns:behaviors="clr-namespace:RhymeDictionary.Wpf.Behaviors"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        mc:Ignorable="d"
+        d:DataContext="{d:DesignInstance Type=local:ViewModel}"
+        FocusManager.FocusedElement="{Binding ElementName=WordTextBox}"
+        Title="Rimen Rechnik Admin">
+    <Window.DataContext>
+        <local:ViewModel />
+    </Window.DataContext>
+
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+        <converters:SentWordStateToBackgroundConverter x:Key="StateToBackgroundConverter"
+                                              FinishedWarning="#FFFF00"
+                                              FinishedError="#DDFF0000" />
+        <converters:SentWordStateToLoadingVisibility x:Key="SentWordStateToLoadingVisibility" />
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition />
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0" Margin="24">
+            <Label>Enter word to add:</Label>
+            <TextBox Grid.Row="0" Text="{Binding Word, Mode=TwoWay}" x:Name="WordTextBox" Height="36">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="KeyDown">
+                        <behaviors:SendCommandAndClearTextOnEnterKeyAction Command="{Binding AddWordCommand}" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </TextBox>
+        </StackPanel>
+
+        <ScrollViewer Grid.Row="1" Margin="24">
+            <ItemsControl ItemsSource="{Binding SentWords}" x:Name="SentWordsListBox">
+                <ItemsControl.ItemContainerStyle>
+                    <Style TargetType="ContentPresenter">
+                        <Setter Property="Height" Value="36" />
+                        <Setter Property="Margin" Value="0, 12, 0, 0" />
+                        <Setter Property="HorizontalAlignment" Value="Stretch" />
+                    </Style>
+                </ItemsControl.ItemContainerStyle>
+
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Background="{Binding State, Converter={StaticResource StateToBackgroundConverter}}">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+
+                            <ProgressBar Grid.Row="0" 
+                                     Grid.ColumnSpan="2"
+                                     IsIndeterminate="True"
+                                     Visibility="{Binding State, Converter={StaticResource SentWordStateToLoadingVisibility}}" />
+                            <Grid Grid.Row="1">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" MinWidth="150" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+
+                                <TextBlock Grid.Column="0" Text="{Binding Word}" FontFamily="SegoeUI" FontSize="18" />
+                                <TextBlock Grid.Column="1" Margin="24, 0, 0, 0" Text="{Binding ErrorMessage}" FontFamily="SegoeUI" FontSize="18" />
+                            </Grid>
+                        </Grid>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+        
+        <StackPanel Grid.Row="2" Margin="24">
+            <Label>Server URL: (api/)</Label>
+            <TextBox Text="{Binding ServerUrl, Mode=TwoWay}" />
+
+            <Label>Server Token Discovery URL: (/)</Label>
+            <TextBox Text="{Binding ServerTokenUrl, Mode=TwoWay}" />
+
+            <Label>Client Id:</Label>
+            <TextBox Text="{Binding ServerClientId, Mode=TwoWay}" />
+
+            <Label>Client Secret:</Label>
+            <TextBox Text="{Binding ServerClientSecret, Mode=TwoWay}" />
+        </StackPanel>
+    </Grid>
+</Window>

@@ -1,0 +1,22 @@
+﻿@model RhymeDictionary.ViewModels.AddWordsViewModel
+@{
+    ViewBag.Title = "Добави нови рими";
+    Layout = "_Layout";
+}
+<div class="page-header">
+    <h1>Добави рими</h1>
+</div>
+
+
+<h2>Ако забелязвате пропуски в Римения Речник или искате да ни помогнете да увеличим бройката думи, може да добавите вашите предложения в долното поле. <a href="/за-нас#news">Тук</a> може да видите последно добавените от нас думи.</h2>
+<br/>
+
+<form class="form-horizontal" method="post">
+    @Html.AntiForgeryToken()
+
+    <label asp-for="Suggestions" class="control-label">Думи или рими, които да добавим</label>
+    <textarea asp-for="Suggestions" type="text" name="Suggestions" class="form-control" rows="10"></textarea>
+    <br/>
+
+    <button type="submit" value="Добави рими" class="form-control btn btn-success">Добави рими</button>
+</form>
